@@ -1,0 +1,2 @@
+﻿type,severity,ip,failed_attempts,window_minutes,first_attempt,last_attempt,message
+POSSIBLE_BRUTE_FORCE,HIGH,192.168.1.15,5,5,2026-10-09 08:01:05,2026-10-09 08:02:02,5 falhas de autenticação em até 5 minutos

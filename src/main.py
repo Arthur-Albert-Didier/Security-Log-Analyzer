@@ -3,10 +3,12 @@ from pathlib import Path
 
 from detector import detect_brute_force
 from log_parser import parse_log_line
+from report_generator import generate_csv_report
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LOG_FILE = PROJECT_ROOT / "data" / "sample_logs.log"
+REPORT_FILE = PROJECT_ROOT / "reports" / "security_report.csv"
 
 
 def main() -> None:
@@ -33,19 +35,22 @@ def main() -> None:
     print(f"Registros válidos: {len(logs)}")
     print(f"Linhas inválidas: {invalid_lines}")
 
-    alerts = detect_brute_force(logs)
+    alerts = detect_brute_force(
+        logs,
+        threshold=5,
+        window_minutes=5,
+    )
 
     print(f"\nAlertas encontrados: {len(alerts)}")
-
-    if not alerts:
-        print("Nenhum padrão suspeito detectado.")
-        return
 
     for alert in alerts:
         print(f"\n[{alert['severity']}] {alert['type']}")
         print(f"IP: {alert['ip']}")
         print(f"Tentativas: {alert['failed_attempts']}")
         print(f"Detalhes: {alert['message']}")
+
+    generate_csv_report(alerts, REPORT_FILE)
+    print(f"\nRelatório CSV salvo em: {REPORT_FILE}")
 
 
 if __name__ == "__main__":

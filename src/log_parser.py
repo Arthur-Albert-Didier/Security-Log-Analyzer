@@ -1,4 +1,5 @@
 
+import ipaddress
 import re
 from datetime import datetime
 
@@ -13,7 +14,7 @@ LOG_PATTERN = re.compile(
 
 
 def parse_log_line(line: str) -> dict | None:
-    """Converte uma linha de log válida em um dicionário."""
+    """Converte uma linha válida em um registro estruturado."""
     line = line.strip()
 
     if not line:
@@ -30,6 +31,7 @@ def parse_log_line(line: str) -> dict | None:
         timestamp = datetime.strptime(
             data["timestamp"], "%Y-%m-%d %H:%M:%S"
         )
+        ipaddress.ip_address(data["ip"])
     except ValueError:
         return None
 
